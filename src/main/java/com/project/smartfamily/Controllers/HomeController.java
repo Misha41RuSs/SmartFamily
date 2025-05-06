@@ -16,5 +16,4 @@ public class HomeController {
         return "login";
     }
 
-    // ❌ Удалить отсюда @GetMapping("/register"), чтобы не дублировался
 }

@@ -18,28 +18,22 @@ public class User {
     @Column(name = "password_hash")
     private String passwordHash;
 
+    // ВСЕ дома, в которых состоит пользователь
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserHome> userHomes;
 
-    @OneToMany(mappedBy = "administrator", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserHome> administeredHomes;
+    // Для удобства можно отфильтровать только администрируемые:
+    @Transient
+    public List<UserHome> getAdministeredHomes() {
+        return userHomes.stream()
+                .filter(UserHome::isAdministrator)
+                .toList();
+    }
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TransactionAccount> transactionAccounts;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TransactionFinancialGoal> transactionFinancialGoals;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PersonalTask> personalTasks;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DistributedTask> distributedTasks;
-
+    // ======== getters / setters ========
     public Long getUserId() {
         return userId;
     }
-
     public void setUserId(Long userId) {
         this.userId = userId;
     }
@@ -47,7 +41,6 @@ public class User {
     public String getRole() {
         return role;
     }
-
     public void setRole(String role) {
         this.role = role;
     }
@@ -55,7 +48,6 @@ public class User {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -63,7 +55,6 @@ public class User {
     public String getPasswordHash() {
         return passwordHash;
     }
-
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
     }
@@ -71,16 +62,7 @@ public class User {
     public List<UserHome> getUserHomes() {
         return userHomes;
     }
-
     public void setUserHomes(List<UserHome> userHomes) {
         this.userHomes = userHomes;
-    }
-
-    public List<UserHome> getAdministeredHomes() {
-        return administeredHomes;
-    }
-
-    public void setAdministeredHomes(List<UserHome> administeredHomes) {
-        this.administeredHomes = administeredHomes;
     }
 }
